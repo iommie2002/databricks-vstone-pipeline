@@ -1,0 +1,80 @@
+resources:
+  jobs:
+    Bronze_ingestion:
+      name: Bronze_ingestion
+      tasks:
+        - task_key: bronze_ingestion
+          notebook_task:
+            # Note: Using relative path is best practice for DABs
+            notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstone/Notebooks/Data Ingestion/Chunk 1 Ingestion using Copy into
+            source: WORKSPACE
+            base_parameters:
+              # These keys must match the dbutils.widgets.get() in your notebook
+              catalog_name: ${var.catalog_name}
+              schema_name: ${var.schema_name}
+      queue:
+        enabled: true
+      performance_target: PERFORMANCE_OPTIMIZED
+
+    Json_ingestion:
+      name: Json ingestion
+      tasks:
+        - task_key: json_ingestion
+          notebook_task:
+            notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/Notebooks/Chunk
+              3 Ingestion using Autoloader
+            source: WORKSPACE
+            base_parameters:
+              # This maps the YAML variable to the dbutils.widgets
+              catalog_name: ${var.catalog_name}
+              schema_name: ${var.schema_name}
+              source_path: ${var.source_path}
+              checkpoint_base: ${var.checkpoint_path}
+      queue:
+        enabled: true
+      performance_target: PERFORMANCE_OPTIMIZED
+
+    XML_ingestion:
+      name: XML ingestion
+      tasks:
+        - task_key: Vouchers_XML
+          notebook_task:
+            notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/Notebooks/Chunk
+              4 Ingestion using XML
+            base_parameters:
+              source_path: ${var.source_path1}
+              # In your XML_ingestion tasks:
+              target_table: "`vstone-catalog`.`${var.schema_name}`.bronze_vouchers"
+              source_tag: "vouchers"
+            source: WORKSPACE
+
+        - task_key: menuitems_xml
+          notebook_task:
+            notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/Notebooks/Chunk
+              4 Ingestion using XML
+            base_parameters:
+              source_path: ${var.source_path2}
+              target_table: "`vstone-catalog`.`${var.schema_name}`.bronze_menuitems"
+              source_tag: "menuitems"
+            source: WORKSPACE
+        - task_key: stores_xml
+          notebook_task:
+            notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/Notebooks/Chunk
+              4 Ingestion using XML
+            base_parameters:
+              source_path: ${var.source_path3}
+              target_table: "`vstone-catalog`.`${var.schema_name}`.bronze_stores"
+              source_tag: "stores"
+            source: WORKSPACE
+        - task_key: paymentmethods_xml
+          notebook_task:
+            notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/Notebooks/Chunk
+              4 Ingestion using XML
+            base_parameters:
+              source_path: ${var.source_path4}
+              target_table: "`vstone-catalog`.`${var.schema_name}`.bronze_paymentmethods"
+              source_tag: "paymentmethods"
+            source: WORKSPACE
+      queue:
+        enabled: true
+      performance_target: PERFORMANCE_OPTIMIZED

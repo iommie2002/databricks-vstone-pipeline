@@ -1,0 +1,18 @@
+resources:
+  pipelines:
+    pipeline_delta_ingestion:
+      name: delta ingestion
+      libraries:
+        - notebook:
+            path: /Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/pipelines/Chunk
+              2 Ingestion using Incremental Loading.ipynb
+        - notebook:
+            path: /Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/pipelines/Chunk
+              2 Ingestion using Incremental Loading.ipynb
+      schema: bronze_schema
+      continuous: false
+      development: true
+      photon: true
+      channel: PREVIEW
+      catalog: vstone-catalog
+      serverless: true
