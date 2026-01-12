@@ -1,0 +1,45 @@
+# Databricks Asset Bundle configuration, more info here: https://docs.databricks.com/en/dev-tools/bundles/settings.html
+bundle:
+  name: "vstonedab"
+
+include:
+  - resources/*.yml
+  - resources/*/*.yml
+  - env/*.yml
+  - env/*/*.yml
+# Variable declarations. 
+variables:
+  catalog_name:
+    description: "The Unity Catalog to use"
+    default: "main"  # Hardcoded string prevents "cycle detected" error
+  schema_name:
+    description: "The schema (database) to use"
+    default: "bronze_layer"
+
+targets:
+  # The 'dev' target, for development purposes. This target is the default.
+  dev:
+    mode: development
+    default: true
+    workspace:
+      host: https://dbc-d7b60c35-ba3f.cloud.databricks.com
+    variables:
+      catalog_name: "vstone-catalog" # Matches declaration name exactly
+      schema_name: "bronze_schema"
+
+
+  # The 'prod' target, used for production deployment.
+  prod:
+    mode: production
+    workspace:
+      host: https://dbc-d7b60c35-ba3f.cloud.databricks.com
+      # We always use /Users/awariomkar3@gmail.com for all resources to make sure we only have a single copy.
+    variables:
+      catalog_name: "vstone-catalog"
+      schema_name: "bronze_schema"
+      
+      root_path: /Users/awariomkar3@gmail.com/.bundle/${bundle.name}/${bundle.target}
+    run_as:
+      # This runs as awariomkar3@gmail.com in production. We could also use a service principal here,
+      # see https://docs.databricks.com/dev-tools/bundles/permissions.html.
+      user_name: awariomkar3@gmail.com

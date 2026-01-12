@@ -1,0 +1,26 @@
+# Databricks Bundle temporary build files
+.databricks/
+out/
+
+# Local configuration overrides (Secrets/Personal settings)
+databricks.yml.local
+*.local.yml
+
+# Python environment & cache
+__pycache__/
+*.py[cod]
+.venv/
+env/
+venv/
+
+# Environment variables / Secrets
+.env
+.secrets
+
+# IDE specific files
+.vscode/
+.idea/
+
+# OS generated files
+.DS_Store
+Thumbs.db
