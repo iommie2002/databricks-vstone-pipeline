@@ -5,11 +5,9 @@ resources:
       tasks:
         - task_key: bronze_ingestion
           notebook_task:
-            # Note: Using relative path is best practice for DABs
             notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstone/Notebooks/Data Ingestion/Chunk 1 Ingestion using Copy into
             source: WORKSPACE
             base_parameters:
-              # These keys must match the dbutils.widgets.get() in your notebook
               catalog_name: ${var.catalog_name}
               schema_name: ${var.schema_name}
       queue:
@@ -21,11 +19,9 @@ resources:
       tasks:
         - task_key: json_ingestion
           notebook_task:
-            notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/Notebooks/Chunk
-              3 Ingestion using Autoloader
+            notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/Notebooks/Chunk 3 Ingestion using Autoloader
             source: WORKSPACE
             base_parameters:
-              # This maps the YAML variable to the dbutils.widgets
               catalog_name: ${var.catalog_name}
               schema_name: ${var.schema_name}
               source_path: ${var.source_path}
@@ -39,42 +35,81 @@ resources:
       tasks:
         - task_key: Vouchers_XML
           notebook_task:
-            notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/Notebooks/Chunk
-              4 Ingestion using XML
+            notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/Notebooks/Chunk 4 Ingestion using XML
+            source: WORKSPACE
             base_parameters:
               source_path: ${var.source_path1}
-              # In your XML_ingestion tasks:
-              target_table: "`vstone-catalog`.`${var.schema_name}`.bronze_vouchers"
+              target_table: "vstone-catalog.${var.schema_name}.bronze_vouchers"
               source_tag: "vouchers"
-            source: WORKSPACE
 
         - task_key: menuitems_xml
           notebook_task:
-            notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/Notebooks/Chunk
-              4 Ingestion using XML
+            notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/Notebooks/Chunk 4 Ingestion using XML
+            source: WORKSPACE
             base_parameters:
               source_path: ${var.source_path2}
-              target_table: "`vstone-catalog`.`${var.schema_name}`.bronze_menuitems"
+              target_table: "vstone-catalog.${var.schema_name}.bronze_menuitems"
               source_tag: "menuitems"
-            source: WORKSPACE
+
         - task_key: stores_xml
           notebook_task:
-            notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/Notebooks/Chunk
-              4 Ingestion using XML
+            notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/Notebooks/Chunk 4 Ingestion using XML
+            source: WORKSPACE
             base_parameters:
               source_path: ${var.source_path3}
-              target_table: "`vstone-catalog`.`${var.schema_name}`.bronze_stores"
+              target_table: "vstone-catalog.${var.schema_name}.bronze_stores"
               source_tag: "stores"
-            source: WORKSPACE
+
         - task_key: paymentmethods_xml
           notebook_task:
-            notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/Notebooks/Chunk
-              4 Ingestion using XML
+            notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/Notebooks/Chunk 4 Ingestion using XML
+            source: WORKSPACE
             base_parameters:
               source_path: ${var.source_path4}
-              target_table: "`vstone-catalog`.`${var.schema_name}`.bronze_paymentmethods"
+              target_table: "vstone-catalog.${var.schema_name}.bronze_paymentmethods"
               source_tag: "paymentmethods"
+      queue:
+        enabled: true
+
+    Silver_Layer_Creation:
+      name: Silver Layer Creation
+      tasks:
+        - task_key: silver_menuitems
+          notebook_task:
+            notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/Notebooks/Silver Table Creation/Menuitems Silver table creation
             source: WORKSPACE
+
+        - task_key: silver_paymentmethods
+          notebook_task:
+            notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/Notebooks/Silver Table Creation/Paymentmethods Silver table Creation
+            source: WORKSPACE
+
+        - task_key: silver_stores
+          notebook_task:
+            notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/Notebooks/Silver Table Creation/Stores Silver Table Creation
+            source: WORKSPACE
+
+        - task_key: silver_users
+          notebook_task:
+            notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/Notebooks/Silver Table Creation/Users Silver Table Creation
+            source: WORKSPACE
+
+        - task_key: silver_vouchers
+          notebook_task:
+            notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/Notebooks/Silver Table Creation/Vouchers Silver Table Creation
+            source: WORKSPACE
+
+        - task_key: silver_transactions
+          notebook_task:
+            notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/Notebooks/Silver Table Creation/Transactions Silver Table Creation
+            source: WORKSPACE
+
+        - task_key: silver_transactionitems
+          # Example of dependency: silver_transactionitems waits for silver_transactions
+          notebook_task:
+            notebook_path: /Workspace/Users/awariomkar3@gmail.com/databricks-vstone-pipeline/Vstone/vstonedab/src/Notebooks/Silver Table Creation/Transactions Items Silver Table Creation
+            source: WORKSPACE
+
       queue:
         enabled: true
       performance_target: PERFORMANCE_OPTIMIZED
